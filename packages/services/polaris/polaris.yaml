@@ -350,7 +350,7 @@ modules:
     
       image:
         repository: quay.io/okdp/polaris-console
-        tag: 0.1.0-incubating
+        tag: v0.1.0
         pullPolicy: Always
         
       env:
