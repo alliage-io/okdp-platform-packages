@@ -123,6 +123,21 @@ modules:
               name: opal-master-token-secret
               key: token
 
+        {{- with .Context.platform.proxy }}
+        {{- if or .httpProxy .httpsProxy .noProxy }}
+        extraEnv:
+          {{- with .httpProxy }}
+          HTTP_PROXY: {{ . | quote }}
+          {{- end }}
+          {{- with .httpsProxy }}
+          HTTPS_PROXY: {{ . | quote }}
+          {{- end }}
+          {{- with .noProxy }}
+          NO_PROXY: {{ . | quote }}
+          {{- end }}
+        {{- end }}
+        {{- end }}
+
   - name: main
     dependsOn:
       - opal
