@@ -35,6 +35,9 @@ schema:
       numWorkers: { type: integer, default: 1, description: "Number of workers" }
       workerMemoryGi: { type: number, default: 2, multipleOf: 0.25, description: "Worker memory (GiB) used for Kubernetes requests/limits (recommended: request=limit)." }
       workerCpu: { type: number, default: 0.5, multipleOf: 0.25, description: "Worker CPU request in millicores (e.g., 500=0.5 vCPU, 1000=1 vCPU)." }
+      enableOPA: { type: boolean, default: true, description: "Whether to enable OPA" }
+      policyRepoUrl: { type: string, default: "https://github.com/OKDP/trino-opal-example-policy.git", description: "OPA policy repo URL" }
+      policyRepoMainBranch: { type: string, default: "feat/data-model", description: "OPA policy repo branch" }
   context:
     properties:
       platform:
@@ -99,7 +102,8 @@ modules:
                 key: token
 
       server:
-        policyRepoUrl: https://github.com/OKDP/trino-opal-example-policy.git
+        policyRepoUrl: {{ .Parameters.policyRepoUrl }}
+        policyRepoMainBranch: "{{ .Parameters.policyRepoMainBranch }}"
 
         OPAL_AUTH_PRIVATE_KEY:
           valueFrom:
@@ -415,6 +419,7 @@ modules:
       additionalConfigProperties:
         - internal-communication.shared-secret=${ENV:TRINO_SHARED_SECRET}
 
+      {{- if .Parameters.enableOPA }}
       accessControl:
         type: properties
         properties: |
@@ -422,6 +427,7 @@ modules:
           opa.policy.uri=http://{{ .Release.metadata.name }}-opa.{{ .Release.spec.targetNamespace }}:443/v1/data/trino/allow
           opa.log-responses=true
           opa.log-requests=true
+      {{- end }}
 roles:
   - interactive-query
 dependencies:
