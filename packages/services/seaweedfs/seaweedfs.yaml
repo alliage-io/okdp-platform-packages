@@ -16,7 +16,7 @@
 
 apiVersion: v1alpha1
 name: seaweedfs
-tag: 4.17.0-p2
+tag: 4.17.0-p3
 protected: false
 description: |
   SeaweedFS is a simple and highly scalable distributed file system. There are the objectives to store billions of files and to serve the files fast!
@@ -95,6 +95,10 @@ modules:
       
       {{- $trinoIdentity := .Context.defaultStorage.settings.s3.advanced.identities.trino -}}
       {{- $trinoStorageSecret := coalesce $trinoBronzeStorageSecret $trinoSilverStorageSecret $trinoGoldStorageSecret -}}
+
+      # Pin the chart fullname so the generated IAM ConfigMap has a deterministic
+      # name, independent of Helm's fullname dedup (wich depends on the release name)
+      fullnameOverride: {{ $release }}-auth-config 
 
       iamConfig:
         sts:
