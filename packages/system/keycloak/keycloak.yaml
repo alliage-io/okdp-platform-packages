@@ -145,6 +145,20 @@ modules:
             {
               "realm": "{{ .Context.defaultIdp.settings.realm.name }}",
               "enabled": true,
+              "components": {
+                "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
+                  {
+                    "name": "Trusted Hosts",
+                    "providerId": "trusted-hosts",
+                    "subType": "anonymous",
+                    "config": {
+                      "host-sending-registration-request-must-match": ["true"],
+                      "client-uris-must-match": ["true"],
+                      "trusted-hosts": ["*.svc.cluster.local", "*.okdp.sandbox"]
+                    }
+                  }
+                ]
+              },
               "displayName": "{{ .Context.defaultIdp.settings.realm.displayName }}",
               "users": [
                 {{- range $index, $user := .Context.defaultIdp.settings.users }}
