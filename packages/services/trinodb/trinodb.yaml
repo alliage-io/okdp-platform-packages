@@ -405,14 +405,24 @@ modules:
         - name: TRINO_OAUTH_CLIENT_ID
           valueFrom:
             secretKeyRef:
+              {{- if .Release.dcrEnable }}
               name: {{ $release }}-{{ $namespace }}-dcr
               key: OIDC_CLIENT_ID
+              {{- else }}
+              name: {{ .Context.trino.oidc.credentialsSecret.name }}
+              key: {{ .Context.trino.oidc.credentialsSecret.clientIdKey }}
+              {{- end }}
 
         - name: TRINO_OAUTH_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
+              {{- if .Release.dcrEnable }}
               name: {{ $release }}-{{ $namespace }}-dcr
               key: OIDC_CLIENT_SECRET
+              {{- else }}
+              name: {{ .Context.trino.oidc.credentialsSecret.name }}
+              key: {{ .Context.trino.oidc.credentialsSecret.clientSecretKey }}
+              {{- end }}
 
         - name: TRINO_SHARED_SECRET
           valueFrom:
