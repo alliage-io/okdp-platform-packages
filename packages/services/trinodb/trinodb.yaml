@@ -40,6 +40,7 @@ schema:
       policyRepoMainBranch: { type: string, default: "main", description: "OPA policy repo branch." }
       OPAL_POLICY_SUBSCRIPTION_DIRS: {type: string, default: "trino_opa_policy", description: "Policy directories in the repository for which the client will subscribe to, seperated by ':'."}
       OPAL_POLICY_REPO_MANIFEST_PATH: { type: string, default: "trino_opa_policy", description: "The location of the manifest file in the remote repository."}
+      opaPolicyPath: {type: string, default: "v1/data/trino/allow", description: "Path of the OPA policies for Trino used in the Trino variable opa.policy.uri."}
   context:
     properties:
       platform:
@@ -441,7 +442,7 @@ modules:
         type: properties
         properties: |
           access-control.name=opa
-          opa.policy.uri=http://{{ .Release.metadata.name }}-opa.{{ .Release.spec.targetNamespace }}:8181/v1/data/trino/allow
+          opa.policy.uri=http://{{ .Release.metadata.name }}-opa.{{ .Release.spec.targetNamespace }}:8181/{{ .Parameters.opaPolicyPath }}
           opa.log-responses=true
           opa.log-requests=true
       {{- end }}
