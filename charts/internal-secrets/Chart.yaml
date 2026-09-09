@@ -1,9 +1,0 @@
-apiVersion: v2
-name: internal-secrets
-description: >-
-  Generates the secrets a service needs for its own internals (inter-node
-  shared secrets, signing keys), as StringSecret resources handed to the
-  kubernetes-secret-generator. Nothing outside the service consumes them, so
-  no one has to choose their value.
-type: application
-version: 0.1.0
