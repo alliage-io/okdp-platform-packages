@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 #
-# A package embeds a local chart by relative path (`path: ../../../charts/x`),
-# so changing that chart changes the package's artifact. release-please assigns
+# A chart embeds a local chart of charts/ by relative path (a Chart.yaml
+# dependency `repository: file://../../../charts/x`, or a vendor.yaml entry
+# `repository: file://...`), so changing that chart changes the embedding
+# chart's artifact. release-please assigns
 # commits to packages by directory, and charts/ is outside every package, so a
 # charts-only change would release nothing and never reach the registry.
 #
@@ -30,8 +32,8 @@ charts=$(printf '%s\n' "${changed[@]}" | grep -oE '^charts/[^/]+' | sort -u)
 for chart in ${charts}
 do
   name="${chart#charts/}"
-  # Packages embedding this chart by relative path
-  consumers=$(grep -rl "path: .*charts/${name}\$" packages/ 2>/dev/null | xargs -r -n1 dirname | sort -u)
+  # Charts embedding this chart by relative path (Chart.yaml or vendor.yaml)
+  consumers=$(grep -rlE "repository: *[\"']?file://([^ ]*/)?charts/${name}/?[\"']?\$" packages/ --include=Chart.yaml --include=vendor.yaml 2>/dev/null | grep -v '/vendor/' | xargs -r -n1 dirname | sort -u)
 
   [[ -z "${consumers}" ]] && continue
 
