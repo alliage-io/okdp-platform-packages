@@ -1,8 +1,0 @@
-apiVersion: v2
-name: oidc-client
-description: >-
-  Provisions the OAuth client of a service against kubauth: generates the client
-  secret, publishes its bcrypt hash where kubauth reads it, and posts the
-  OidcClient CR. Only used when platform.identity.clientProvisioning is kubauth.
-type: application
-version: 0.1.0
