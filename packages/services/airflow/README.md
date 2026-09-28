@@ -84,10 +84,10 @@ default release timeout.
 ## Tests
 
 ```sh
+scripts/vendor-charts.sh packages/services/airflow   # download vendor/ (not committed)
 helm dependency build packages/services/airflow
 for f in packages/services/airflow/ci/*-values.yaml; do
   helm lint packages/services/airflow -f "$f"
   helm template demo-airflow packages/services/airflow -n demo -f "$f" >/dev/null
 done
-scripts/vendor-charts.sh --check packages/services/airflow
 ```

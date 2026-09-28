@@ -79,12 +79,12 @@ catalogs: [tpch, tpcds, <catalog names>]
 ## Tests
 
 ```sh
+scripts/vendor-charts.sh packages/services/trino   # download vendor/ (not committed)
 helm dependency build packages/services/trino
 for f in packages/services/trino/ci/*-values.yaml; do
   helm lint packages/services/trino -f "$f"
   helm template demo-trino packages/services/trino -n demo -f "$f" >/dev/null
 done
-scripts/vendor-charts.sh --check packages/services/trino
 ```
 
 ## Access guide

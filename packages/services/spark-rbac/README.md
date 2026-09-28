@@ -31,10 +31,10 @@ No platform value is read. No provided connection, no UI.
 ## Tests
 
 ```sh
+scripts/vendor-charts.sh packages/services/spark-rbac   # download vendor/ (not committed)
 helm dependency build packages/services/spark-rbac
 for f in packages/services/spark-rbac/ci/*-values.yaml; do
   helm lint packages/services/spark-rbac -f "$f"
   helm template demo-spark-rbac packages/services/spark-rbac -n demo -f "$f" >/dev/null
 done
-scripts/vendor-charts.sh --check packages/services/spark-rbac
 ```

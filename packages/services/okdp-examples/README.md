@@ -50,10 +50,10 @@ every sync), idempotent (`mc mb ... || true`, `CREATE ... IF NOT EXISTS`).
 ## Tests
 
 ```sh
+scripts/vendor-charts.sh packages/services/okdp-examples   # download vendor/ (not committed)
 helm dependency build packages/services/okdp-examples
 for f in packages/services/okdp-examples/ci/*-values.yaml; do
   helm lint packages/services/okdp-examples -f "$f"
   helm template demo-examples packages/services/okdp-examples -n demo -f "$f" >/dev/null
 done
-scripts/vendor-charts.sh --check packages/services/okdp-examples
 ```
